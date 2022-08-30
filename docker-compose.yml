@@ -1,0 +1,42 @@
+version: '3.2'
+
+services:
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "8098:80"
+    depends_on:
+      - fpm
+    links:
+      - fpm
+    volumes:
+      - ./:/var/www/alinea-test
+
+  fpm: #fpm
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./:/var/www/alinea-test
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "33061:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=alinea-test
+#      - MYSQL_USER=oleksandra
+#      - MYSQL_PASSWORD=4444
+
+  #pgsql:
+  #  image: postgres:9.5
+  #  environment:
+  #    - POSTGRES_DB=yii2advanced
+  #    - POSTGRES_USER=yii2advanced
+  #    - POSTGRES_PASSWORD=secret
