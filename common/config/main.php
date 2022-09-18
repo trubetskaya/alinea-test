@@ -9,5 +9,8 @@ return [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
+        'tenderingAPI' => function() {
+            return new common\openprocurement\TenderingAPI(new GuzzleHttp\Client());
+        }
     ],
 ];
